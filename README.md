@@ -1,5 +1,5 @@
 # 3DcorCam
-# communication with Basler Cam
+Communication with Basler Cam
 
 The main purpose of this respository is to manage the machine vision camera, especially from BASLER.
 Here, multi-camera handling method is included.
