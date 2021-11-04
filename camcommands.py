@@ -2,11 +2,8 @@
 
 
 # import packages and functions
-import os
-import sys
-from pypylon import genicam
 from pypylon import pylon
-import datetime
+
 
 def camOpen(camera):
     try:
@@ -18,10 +15,10 @@ def camOpen(camera):
 
 def cam_init ():
     # getting instance of basler cam
-    # return devices connected
+    # return tl_factory and devices
     tl_factory = pylon.TlFactory.GetInstance()
     devices = tl_factory.EnumerateDevices()
-    return devices
+    return tl_factory, devices
 
 
 def cam_non_identical (devices, dev_number):
@@ -65,9 +62,25 @@ def dev_info(devices):
                 raise EnvironmentError("no GigE device found")
 
 
-def dev_2_array (devices, dev_number):
+def dev_2_array (tl_factory, devices, dev_number):
     # create array of devices connected for the easier handling of individual camera
+    # return array including device instance
     cams = pylon.InstantCameraArray(min(len(devices), dev_number)) # create instant
     for i, cam in enumerate(cams):
         cam.Attach(tl_factory.CreateDevice(devices[i]))
+    return cams
+
+
+def dev_set_param (cam, param_dict):
+    # set parameters of device individually
+    # param_dict: paramter dictionary / param_dict = {"Height": , "Width": , "ExposureTime": , "FPS": }
+    cam.Open() # cam open
+    print("Setting device ", cam.GetDeviceInfo().GetFriendlyName())
+    cam.Height.SetValue(param_dict["Height"])
+    cam.Width.SetValue(param_dict["Width"])
+    cam.ExposureTimeRaw.SetValue(param_dict["ExposureTime"])
+    cam.AcquisitionFrameRateAbs.SetValue(param_dict["FPS"])
+    print(cam.Height.GetValue(), cam.Width.GetValue(), cam.ExposureTimeRaw.GetValue(), cam.AcquisitionFrameRateAbs.GetValue())
+
+    cam.Close() # close camera
 
