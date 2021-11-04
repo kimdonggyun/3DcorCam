@@ -2,11 +2,10 @@
 
 
 # import packages and functions
+from pypylon import pylon
 import os
 import sys
-from pypylon import genicam
-from pypylon import pylon
-import datetime
+
 
 def camOpen(camera):
     try:
@@ -86,3 +85,4 @@ def dev_set_param (cam, param_dict):
     print(cam.Height.GetValue(), cam.Width.GetValue(), cam.ExposureTimeRaw.GetValue(), cam.AcquisitionFrameRateAbs.GetValue())
 
     cam.Close() # close camera
+
