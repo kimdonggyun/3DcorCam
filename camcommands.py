@@ -16,6 +16,7 @@ def camOpen(camera):
 def cam_init ():
     # getting instance of basler cam
     # return tl_factory and devices
+    print("getting first camera instance")
     tl_factory = pylon.TlFactory.GetInstance()
     devices = tl_factory.EnumerateDevices()
     return tl_factory, devices
