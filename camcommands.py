@@ -3,8 +3,6 @@
 
 # import packages and functions
 from pypylon import pylon
-import os
-import sys
 
 
 def camOpen(camera):
