@@ -77,11 +77,13 @@ def dev_set_param (cam, param_dict):
     # param_dict: paramter dictionary / param_dict = {"Height": , "Width": , "ExposureTime": , "FPS": }
     cam.Open() # cam open
     print("Setting device ", cam.GetDeviceInfo().GetFriendlyName())
+    print("original: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
+        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())
     cam.Height.SetValue(param_dict["Height"])
     cam.Width.SetValue(param_dict["Width"])
     cam.ExposureTimeRaw.SetValue(param_dict["ExposureTime"])
     cam.AcquisitionFrameRateAbs.SetValue(param_dict["FPS"])
-    print(cam.Height.GetValue(), cam.Width.GetValue(), cam.ExposureTimeRaw.GetValue(), cam.AcquisitionFrameRateAbs.GetValue())
+    print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
+        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())
 
     cam.Close() # close camera
-

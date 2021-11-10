@@ -17,9 +17,9 @@ if __name__ == "__main__":
     video_pos = {0:"front", 1:"side"}
 
     cam1 = Process(name="cam1", target=video_recording, 
-                    args=("/Users/dkim/Desktop/basler_camera/recording", "test_multicore_%s.avi" % (video_pos[0]), cams[0]))
+                    args=("C:/Users/dkim/Desktop/basler_cam/recording", "test_multicore_%s.avi" % (video_pos[0]), cams[0]))
     cam2 = Process(name="cam2", target=video_recording, 
-                    args=("/Users/dkim/Desktop/basler_camera/recording", "test_multicore_%s.avi" % (video_pos[1]), cams[1]))
+                    args=("C:/Users/dkim/Desktop/basler_cam/recording", "test_multicore_%s.avi" % (video_pos[1]), cams[1]))
     cam1.start()
     cam2.start()
 
