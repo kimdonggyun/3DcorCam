@@ -10,7 +10,7 @@ def video_recording(file_dir, filename, caminstance):
         print("parent process : %s / process id %s" % (os.getppid(), os.getpid()))
         print("recording start with %s at %s" % (caminstance.DeviceInfo.GetFriendlyName(), datetime.now()))
         caminstance.StopGrabbing()
-        caminstance.StartGrabbingMax(50)
+        caminstance.StartGrabbingMax(500)
         while caminstance.IsGrabbing():
             try :
                 res = caminstance.RetrieveResult(10000, pylon.TimeoutHandling_ThrowException)
