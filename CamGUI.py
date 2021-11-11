@@ -69,6 +69,9 @@ def video_start_stop():
     button2 = ttk.Button(win, text="STOP")
     button2.place(relx= 0.7, rely=0.3, anchor="n")
 
+
+    
+
     win.mainloop() # appear all GUI setting as pop up window
 
 
@@ -88,33 +91,33 @@ def set_parameters():
     # set enntry
     height_label = tk.Label(win, text='Height of Frame in Pixel :')
     height_label.place(relx = 0.1, rely = 0.3, anchor = 'w')
-    height = tk.Entry(win, fg='black', width = 5)
-    height.place(relx = 0.3, rely = 0.3, anchor = 'w')
+    height = tk.Entry(win, fg='black', width = 7)
+    height.place(relx = 0.8, rely = 0.3, anchor = 'w')
 
     width_label = tk.Label(win, text='Width of Frame in Pixel :')
     width_label.place(relx = 0.1, rely = 0.4, anchor = 'w')
-    width = tk.Entry(win, fg='black', width = 5)
-    width.place(relx = 0.3, rely = 0.4, anchor = 'w')
+    width = tk.Entry(win, fg='black', width = 7)
+    width.place(relx = 0.8, rely = 0.4, anchor = 'w')
 
     exposure_label = tk.Label(win, text='Exposure Time in µs :')
     exposure_label.place(relx = 0.1, rely = 0.5, anchor = 'w')
-    exposure = tk.Entry(win, fg='black', width = 5)
-    exposure.place(relx = 0.3, rely = 0.5, anchor = 'w')
+    exposure = tk.Entry(win, fg='black', width = 7)
+    exposure.place(relx = 0.8, rely = 0.5, anchor = 'w')
 
     fps_label = tk.Label(win, text='FPS :')
     fps_label.place(relx = 0.1, rely = 0.6, anchor = 'w')
-    fps = tk.Entry(win, fg='black', width = 5)
-    fps.place(relx = 0.3, rely = 0.6, anchor = 'w')
+    fps = tk.Entry(win, fg='black', width = 7)
+    fps.place(relx = 0.8, rely = 0.6, anchor = 'w')
 
     PixelFormat_label = tk.Label(win, text='PixelFormat (B/W: "Mono8") :')
     PixelFormat_label.place(relx = 0.1, rely = 0.7, anchor = 'w')
-    PixelFormat = tk.Entry(win, fg='black', width = 5)
-    PixelFormat.place(relx = 0.3, rely = 0.7, anchor = 'w')
+    PixelFormat = tk.Entry(win, fg='black', width = 7)
+    PixelFormat.place(relx = 0.8, rely = 0.7, anchor = 'w')
 
     InterPacketDelay_label = tk.Label(win, text='Inter Packet Delay (default 20000) :')
     InterPacketDelay_label.place(relx = 0.1, rely = 0.8, anchor = 'w')
-    InterPacketDelay = tk.Entry(win, fg='black', width = 5)
-    InterPacketDelay.place(relx = 0.3, rely = 0.8, anchor = 'w')
+    InterPacketDelay = tk.Entry(win, fg='black', width = 7)
+    InterPacketDelay.place(relx = 0.8, rely = 0.8, anchor = 'w')
 
     button = ttk.Button(win, text="ISERT")
     button.place(relx= 0.8, rely=0.9, anchor="n")
@@ -125,7 +128,7 @@ def set_parameters():
 
 
 if __name__=="__main__":
-    main_cam_GUI()
-    video_start_stop()
+    #main_cam_GUI()
+    #video_start_stop()
     set_parameters()
 
