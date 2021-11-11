@@ -15,7 +15,7 @@ def camOpen(camera):
 
 def cam_init (dev_number):
     # getting instance of basler cam
-    # return tl_factory and devices
+    # return connected camera instances
     print("getting first camera instance")
     tl_factory = pylon.TlFactory.GetInstance() # get the first instance with all connected cameras
     devices = tl_factory.EnumerateDevices()
@@ -24,8 +24,9 @@ def cam_init (dev_number):
 
     set_tl_factory, set_devices = cam_non_identical(tl_factory, devices, dev_number) # check all physically conneceted cameras get instance
 
+    cams = dev_2_array (set_tl_factory, set_devices, dev_number)
 
-    return set_tl_factory, set_devices
+    return cams
 
 
 def cam_non_identical (tl_factory, devices, dev_number):
