@@ -22,13 +22,13 @@ def cam_init (dev_number):
 
     dev_info(devices) # check whether cameras are connected
 
-    set_tl_factory, set_devices = cam_non_identical(devices, dev_number) # check all physically conneceted cameras get instance
+    set_tl_factory, set_devices = cam_non_identical(tl_factory, devices, dev_number) # check all physically conneceted cameras get instance
 
 
     return set_tl_factory, set_devices
 
 
-def cam_non_identical (devices, dev_number):
+def cam_non_identical (tl_factory, devices, dev_number):
     """
     Basler's package have a problem with MacOS and sometimes all connected camera doesn't show up.
     This def is created to check whether call camera's instants are created.
@@ -37,23 +37,30 @@ def cam_non_identical (devices, dev_number):
     devices = initial camera instant
     dev_number = number of devices connected
     """
-    temp_dev_list = [] # create empty camera list to com
+    
     if len(devices) == 0:
         raise pylon.RuntimeException("No camera connected, please check the camera connection!")
+
     else:
+        temp_dev_list = [] # create empty camera list to com
         for dev_info in devices:
             temp_dev_list.append(dev_info.GetSerialNumber())
-        while len(set(temp_dev_list)) != dev_number: # count the unique camera instant and compare it with desired number of cameras
-            tl_factory = pylon.TlFactory.GetInstance() # get instance again
-            devices = tl_factory.EnumerateDevices()
-            temp_dev_list = []
-            for dev_info in devices:
-                temp_dev_list.append(dev_info.GetSerialNumber())
-            print(temp_dev_list)
-            if len(set(temp_dev_list)) == dev_number:
-                print("all cameras' instance are created", temp_dev_list)
-                break
-    return tl_factory, devices
+
+        if len(set(temp_dev_list)) == dev_number:
+            print("all cameras' instance are created", temp_dev_list)
+            return tl_factory, devices
+        else:
+            while len(set(temp_dev_list)) != dev_number: # count the unique camera instant and compare it with desired number of cameras
+                tl_factory = pylon.TlFactory.GetInstance() # get instance again
+                devices = tl_factory.EnumerateDevices()
+                temp_dev_list = []
+                for dev_info in devices:
+                    temp_dev_list.append(dev_info.GetSerialNumber())
+                print(temp_dev_list)
+                if len(set(temp_dev_list)) == dev_number:
+                    print("all cameras' instance are created", temp_dev_list)
+                    break
+            return tl_factory, devices
 
 def dev_info(devices):
     # print out all connected cameras' basic information
@@ -101,5 +108,6 @@ def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
     cam.GevSCPD.SetValue(InterPacketDelay)
 
     print("Set %s: " %(cam.GetDeviceInfo().GetFriendlyName(), ) , "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
-            "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
+            "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(),
+            "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
     cam.Close() # close camera

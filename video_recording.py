@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 def video_recording(file_dir, filename, cam, video_format = "FFMPEG", video_codec="h264",
-                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 15):
+                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
     """
     recording through camera and writing the video into as a video file
     video_format = e.g. FFMPEG
