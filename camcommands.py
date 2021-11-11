@@ -78,23 +78,28 @@ def dev_2_array (tl_factory, devices, dev_number):
     return cams
 
 
-def dev_set_param (cam, param_dict):
+def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
+         FPS = 10, Pixelformat= "Mono8", InterPacketDelay= 20000):
     """
     when setting parameters while using multiple cameras, consider - Inter packet delay, Frame rate and Exposure Time
     which are critical for generating video (no dropped frame)
-    Inc
-    set parameters of device individually
-    param_dict: paramter dictionary / param_dict = {"Height": , "Width": , "ExposureTime": , "FPS": }
     """
-    cam.Open() # cam open
-    print("Setting device ", cam.GetDeviceInfo().GetFriendlyName())
-    print("original: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
-        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())
-    cam.Height.SetValue(param_dict["Height"])
-    cam.Width.SetValue(param_dict["Width"])
-    cam.ExposureTimeRaw.SetValue(param_dict["ExposureTime"])
-    cam.AcquisitionFrameRateAbs.SetValue(param_dict["FPS"])
-    print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
-        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())
+    cam.Open() # open camera to change the parameter
+    cam.UserSetSelector = "Default" # set camera parameters to dafault setting for constant result
+    cam.UserSetLoad.Execute() # execute for factory setting
+    
+    print("original %s: " % (cam.GetDeviceInfo().GetFriendlyName(), ), " Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
+            "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(),
+            "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
+    
+    # setting values from parameter dictionary
+    cam.Height.SetValue(Height)
+    cam.Width.SetValue(width)
+    cam.ExposureTimeRaw.SetValue(ExposureTime)
+    cam.AcquisitionFrameRateAbs.SetValue(FPS)
+    cam.PixelFormat.SetValue(Pixelformat)
+    cam.GevSCPD.SetValue(InterPacketDelay)
 
+    print("Set %s: " %(cam.GetDeviceInfo().GetFriendlyName(), ) , "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
+            "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
     cam.Close() # close camera
