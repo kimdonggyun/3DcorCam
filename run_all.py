@@ -2,7 +2,7 @@
 
 from camcommands import cam_init, cam_non_identical, dev_info, dev_2_array, dev_set_param
 from video_recording import video_recording
-from multiprocessing import Process
+from threading import Thread
 
 if __name__ == "__main__":
     tl_factory, devices = cam_init()
@@ -16,9 +16,9 @@ if __name__ == "__main__":
 
     video_pos = {0:"front", 1:"side"}
 
-    cam1 = Process(name="cam1", target=video_recording, 
+    cam1 = Thread(name="cam1", target=video_recording, 
                     args=("C:/Users/dkim/Desktop/basler_cam/recording", "test_multicore_%s.avi" % (video_pos[0]), cams[0]))
-    cam2 = Process(name="cam2", target=video_recording, 
+    cam2 = Thread(name="cam2", target=video_recording, 
                     args=("C:/Users/dkim/Desktop/basler_cam/recording", "test_multicore_%s.avi" % (video_pos[1]), cams[1]))
     cam1.start()
     cam2.start()
