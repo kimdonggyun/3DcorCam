@@ -5,8 +5,7 @@ from video_recording import video_recording
 from threading import Thread
 
 if __name__ == "__main__":
-    tl_factory, devices = cam_init(2)
-    cams = dev_2_array(tl_factory, devices, 2)
+    cams = cam_init(2)
 
     for cam in cams:
         dev_set_param(cam) # with default setting
