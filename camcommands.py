@@ -73,8 +73,13 @@ def dev_2_array (tl_factory, devices, dev_number):
 
 
 def dev_set_param (cam, param_dict):
-    # set parameters of device individually
-    # param_dict: paramter dictionary / param_dict = {"Height": , "Width": , "ExposureTime": , "FPS": }
+    """
+    when setting parameters while using multiple cameras, consider - Inter packet delay, Frame rate and Exposure Time
+    which are critical for generating video (no dropped frame)
+    Inc
+    set parameters of device individually
+    param_dict: paramter dictionary / param_dict = {"Height": , "Width": , "ExposureTime": , "FPS": }
+    """
     cam.Open() # cam open
     print("Setting device ", cam.GetDeviceInfo().GetFriendlyName())
     print("original: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
