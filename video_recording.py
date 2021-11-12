@@ -5,7 +5,7 @@ from imageio import get_writer
 import os
 from datetime import datetime
 
-def video_recording(file_dir, filename, cam, video_format = "FFMPEG", video_codec="h264",
+def video_recording(filepath, cam, video_format = "FFMPEG", video_codec="h264",
                     writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
     """
     recording through camera and writing the video into as a video file
@@ -18,7 +18,7 @@ def video_recording(file_dir, filename, cam, video_format = "FFMPEG", video_code
     bitrate = None  # integer, if None, quality parameter will be used. Otherwise, quality parameter will be ignored
     """
 
-    with get_writer(os.path.join(file_dir, filename), format=video_format, codec=video_codec, 
+    with get_writer(filepath, format=video_format, codec=video_codec, 
             macro_block_size=macro_block_size, mode= writing_mode, fps=fps, quality=quality, bitrate=bitrate) as writer:
         #print("parent process : %s / process id %s" % (os.getppid(), os.getpid()))
         print("recording start with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))

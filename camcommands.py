@@ -3,6 +3,8 @@
 
 # import packages and functions
 from pypylon import pylon
+from threading import Thread
+from video_recording import video_recording
 
 
 def camOpen(camera):
@@ -112,3 +114,14 @@ def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
             "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(),
             "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
     cam.Close() # close camera
+
+def multi_recording(cams, file_paths):
+    cam1 = Thread(name="cam1", target=video_recording, 
+                    args=(file_paths[0], cams[0]))
+    cam2 = Thread(name="cam2", target=video_recording, 
+                    args=(file_paths[1], cams[1]))
+    cam1.start()
+    cam2.start()
+
+    cam1.join()
+    cam2.join()
