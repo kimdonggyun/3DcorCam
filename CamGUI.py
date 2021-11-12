@@ -8,6 +8,11 @@ from tkinter import ttk
 from camcommands import cam_init, dev_set_param
 from video_recording import video_recording
 
+class cam_control():
+    def __init__(self):
+        main_cam_GUI()
+
+
 def main_cam_GUI():
     # this is the parent GUI of camera controlling
     win = tk.Tk()
@@ -130,5 +135,5 @@ def set_parameters():
 if __name__=="__main__":
     #main_cam_GUI()
     #video_start_stop()
-    set_parameters()
-
+    #set_parameters()
+    cam_control()
