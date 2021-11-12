@@ -43,25 +43,17 @@ def main_cam_GUI():
 
     # add functions for each buttons
     def run_func():
-        if var1.get()== True: # var1 = getting camera instance and return as an array
+        win.destroy()
+        if var1.get(): # var1 = getting camera instance and return as an array
             print("Getting all connected cameras instance")
             cams = cam_init()
             print("Cameras' instance ", cams)
             return cams
-        if var2.get()== True: # var2 = setting cameras' parameters
+        if var2.get(): # var2 = setting cameras' parameters
             print("Setting cameras' parameter")
-            set_parameters() # call a GUI to type in parameters and return this values
-            win.destroy()
+            set_parameter_entry() # call a GUI to type in parameters and return this values
 
-
-
-
-    """
-    here run definitions
-    
-    """
-
-    button4 = ttk.Button(win, text="run", command=run_func())
+    button4 = ttk.Button(win, text="run", command= run_func) # if arguments are in the command funtions lambda shuold be used. Otherwise, type in only function witout ()
     button4.place(relx= 0.8, rely=0.8, anchor="n")
 
     win.mainloop() # appear all GUI setting as pop up window
@@ -81,19 +73,79 @@ def video_start_stop():
     lable.place(relx=0.5, rely=0.05, anchor = "n")
 
     # add start and stop buttons
-
     button1 = ttk.Button(win, text="START")
     button1.place(relx= 0.3, rely=0.3, anchor="n")
 
     button2 = ttk.Button(win, text="STOP")
     button2.place(relx= 0.7, rely=0.3, anchor="n")
 
-
-    
-
     win.mainloop() # appear all GUI setting as pop up window
 
+class set_parameter_entry:
+    def __init__(self):
+        win = tk.Tk()
+        win.title("Set Camera parameters")
+        win.geometry("400x600")
+        self.win = win
 
+        # add main sub lable
+        lable = tk.Label(win, 
+            text= "type camera parameters",
+            font= ("Arial Bold", 15)
+            )
+        lable.place(relx=0.5, rely=0.05, anchor = "n")
+
+        # set enntry
+        height_label = tk.Label(win, text='Height of Frame in Pixel :')
+        height_label.place(relx = 0.1, rely = 0.3, anchor = 'w')
+        height = tk.Entry(win, fg='black', width = 7)
+        height.place(relx = 0.8, rely = 0.3, anchor = 'w')
+        self.height = height
+
+        width_label = tk.Label(win, text='Width of Frame in Pixel :')
+        width_label.place(relx = 0.1, rely = 0.4, anchor = 'w')
+        width = tk.Entry(win, fg='black', width = 7)
+        width.place(relx = 0.8, rely = 0.4, anchor = 'w')
+        self.width = width
+
+        exposure_label = tk.Label(win, text='Exposure Time in µs :')
+        exposure_label.place(relx = 0.1, rely = 0.5, anchor = 'w')
+        exposure = tk.Entry(win, fg='black', width = 7)
+        exposure.place(relx = 0.8, rely = 0.5, anchor = 'w')
+        self.exposure = exposure
+
+        fps_label = tk.Label(win, text='FPS :')
+        fps_label.place(relx = 0.1, rely = 0.6, anchor = 'w')
+        fps = tk.Entry(win, fg='black', width = 7)
+        fps.place(relx = 0.8, rely = 0.6, anchor = 'w')
+        self.fps = fps
+
+        PixelFormat_label = tk.Label(win, text='PixelFormat (B/W: "Mono8") :')
+        PixelFormat_label.place(relx = 0.1, rely = 0.7, anchor = 'w')
+        PixelFormat = tk.Entry(win, fg='black', width = 7)
+        PixelFormat.place(relx = 0.8, rely = 0.7, anchor = 'w')
+        self.PixelFormat = PixelFormat
+
+        InterPacketDelay_label = tk.Label(win, text='Inter Packet Delay (default 20000) :')
+        InterPacketDelay_label.place(relx = 0.1, rely = 0.8, anchor = 'w')
+        InterPacketDelay = tk.Entry(win, fg='black', width = 7)
+        InterPacketDelay.place(relx = 0.8, rely = 0.8, anchor = 'w')
+        self.InterPacketDelay = InterPacketDelay
+
+        button = ttk.Button(win, text="ISERT", command=self.run_button)
+        button.place(relx= 0.8, rely=0.9, anchor="n")
+
+        win.mainloop() # appear all GUI setting as pop up window
+
+    def run_button(self):
+        height, width, exposure, fps =  self.height.get(), self.width.get(), self.exposure.get(), self.fps.get()
+        PixelFormat, InterPacketDelay = self.PixelFormat.get(), self.InterPacketDelay.get()
+        #for cam in cams:
+        #    dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
+        print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
+        self.win.destroy()
+
+"""
 def set_parameters():
     # this is child GUI of main_cam_GUI when you want to set new parameters on camera
     win = tk.Tk()
@@ -139,23 +191,19 @@ def set_parameters():
     InterPacketDelay.place(relx = 0.8, rely = 0.8, anchor = 'w')
 
     def run_button():
-        if button.get() == True:
-            height, width, exposure, fps, PixelFormat, InterPacketDelay = height.get(), width.get(), exposure.get(), fps.get(), PixelFormat.get(), InterPacketDelay.get()
-            #for cam in cams:
-            #    dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
-            print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
-            win.destroy()
+        height, width, exposure, fps, PixelFormat, InterPacketDelay = height.get(), width.get(), exposure.get(), fps.get(), PixelFormat.get(), InterPacketDelay.get()
+        #for cam in cams:
+        #    dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
+        print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
+        win.destroy()
 
-    button = ttk.Button(win, text="ISERT", command=run_button())
+    button = ttk.Button(win, text="ISERT", command=run_button)
     button.place(relx= 0.8, rely=0.9, anchor="n")
 
     win.mainloop() # appear all GUI setting as pop up window
-
-
-
-
+"""
 
 if __name__=="__main__":
-    main_cam_GUI()
+    #main_cam_GUI()
     #video_start_stop()
-    #cam_control()
+    cam_control()
