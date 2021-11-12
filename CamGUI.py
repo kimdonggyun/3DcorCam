@@ -28,7 +28,7 @@ def main_cam_GUI():
 
     # add action buttons
     var1 = tk.BooleanVar()
-    button1 = ttk.Checkbutton(win, variable=var1, text="Get all connected Camera instaces and return as an Array")
+    button1 = ttk.Checkbutton(win, variable=var1, text="Get all connected Cameras' instace and return as an Array")
     button1.place(relx=0.1, rely=0.3, anchor = "w")
 
 
@@ -41,13 +41,27 @@ def main_cam_GUI():
     button3 = ttk.Checkbutton(win, variable=var3, text="Start or Stop Recording")
     button3.place(relx=0.1, rely=0.5, anchor = "w")
 
+    # add functions for each buttons
+    def run_func():
+        if var1.get()== True: # var1 = getting camera instance and return as an array
+            print("Getting all connected cameras instance")
+            cams = cam_init()
+            print("Cameras' instance ", cams)
+            return cams
+        if var2.get()== True: # var2 = setting cameras' parameters
+            print("Setting cameras' parameter")
+            set_parameters() # call a GUI to type in parameters and return this values
+            win.destroy()
+
+
+
 
     """
     here run definitions
     
     """
 
-    button4 = ttk.Button(win, text="run")
+    button4 = ttk.Button(win, text="run", command=run_func())
     button4.place(relx= 0.8, rely=0.8, anchor="n")
 
     win.mainloop() # appear all GUI setting as pop up window
@@ -124,7 +138,15 @@ def set_parameters():
     InterPacketDelay = tk.Entry(win, fg='black', width = 7)
     InterPacketDelay.place(relx = 0.8, rely = 0.8, anchor = 'w')
 
-    button = ttk.Button(win, text="ISERT")
+    def run_button():
+        if button.get() == True:
+            height, width, exposure, fps, PixelFormat, InterPacketDelay = height.get(), width.get(), exposure.get(), fps.get(), PixelFormat.get(), InterPacketDelay.get()
+            #for cam in cams:
+            #    dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
+            print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
+            win.destroy()
+
+    button = ttk.Button(win, text="ISERT", command=run_button())
     button.place(relx= 0.8, rely=0.9, anchor="n")
 
     win.mainloop() # appear all GUI setting as pop up window
@@ -132,8 +154,8 @@ def set_parameters():
 
 
 
+
 if __name__=="__main__":
-    #main_cam_GUI()
+    main_cam_GUI()
     #video_start_stop()
-    #set_parameters()
-    cam_control()
+    #cam_control()
