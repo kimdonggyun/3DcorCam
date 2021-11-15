@@ -161,6 +161,9 @@ def video_start_stop():
     win.mainloop() # appear all GUI setting as pop up window
 
 class set_parameter_entry:
+    """
+    setting camera paramters by typing the values on GUI
+    """
     def __init__(self):
         win = tk.Tk()
         win.title("Set Camera parameters")
