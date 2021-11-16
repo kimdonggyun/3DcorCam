@@ -31,7 +31,7 @@ class multi_video_recording_start:
 
 
     def get_filepath(self):
-        filepath = filedialog.asksaveasfilename(initialdir=("/"), filetypes=[("video", "mp4")])
+        filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/awiadm/Desktop/Dong_camera/recording"), filetypes=[("video", "*.mp4")])
         print(filepath)
         return filepath
 
