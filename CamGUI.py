@@ -5,9 +5,8 @@
 #import functions
 import tkinter as tk
 from tkinter import ttk
-from tkinter import filedialog
-from camcommands import cam_init, multi_recording ,dev_set_param
-from video_recording import video_recording
+from camcommands import cam_init, dev_set_param
+from video_recording import multi_video_recording_start, multi_video_recording_stop
 
 class cam_control():
     def __init__(self):
@@ -141,44 +140,15 @@ class video_start_stop_dir:
         self.win = win
 
         # add main sub lable
-        lable = tk.Label(win, 
-            text= "Start or Stop camera recording",
-            font= ("Arial Bold", 15)
-            )
+        lable = tk.Label(win, text= "Start or Stop camera recording", font= ("Arial Bold", 15) )
         lable.place(relx=0.5, rely=0.05, anchor = "n")
 
-        # add cam1 and cam2 label
-        cam1_label = tk.Label(win,
-                        text = "here enter cam 1 name",
-                        font = ("Arial Bold", 12)
-                        )
-        cam1_label.place(relx= 0.1, rely=0.2, anchor="w")
-
-        cam2_label = tk.Label(win,
-                        text = "here enter cam 2 name",
-                        font = ("Arial Bold", 12)
-                        )
-        cam2_label.place(relx= 0.1, rely=0.3, anchor="w")
-
-        # define functions for dir and filename entry
-        def dir_sel():
-            dir = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "mp4")])
-            print(dir)        
-            return dir
-
-        # add buttons for choosing directory and typing in file name
-        cam1_button = tk.Button(win, text="choose directory", command=dir_sel)
-        cam1_button.place(relx=0.6, rely= 0.2, anchor= "w") 
-
-        cam2_button = tk.Button(win, text="choose directory", command=dir_sel)
-        cam2_button.place(relx=0.6, rely= 0.3, anchor= "w")
-
         # add start and stop buttons
-        button1 = ttk.Button(win, text="START", command= lambda: video_recording(dir , cams) )
+        button1 = ttk.Button(win, text="START", command= lambda: multi_video_recording_start(cams) )
         button1.place(relx= 0.3, rely=0.5, anchor="n")
 
         button2 = ttk.Button(win, text="STOP")
-        button2.place(relx= 0.7, rely=0.5, anchor="n", command = lambda: video_recording_stop(cams))
+        button2.place(relx= 0.7, rely=0.5, anchor="n", command = lambda: multi_video_recording_stop(cams))
 
         win.mainloop() # appear all GUI setting as pop up window
 
