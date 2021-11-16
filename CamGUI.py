@@ -11,7 +11,9 @@ from video_recording import video_recording
 
 class cam_control():
     def __init__(self):
-        self.cams = cam_init()
+        print("Number of devices connected :")
+        dev_number = input()
+        self.cams = cam_init(dev_number)
         self.main_cam_GUI()
 
     def main_cam_GUI(self):
@@ -60,59 +62,9 @@ class cam_control():
 
         win.mainloop() # appear all GUI setting as pop up window
             
-    
 
-
-"""
-def main_cam_GUI():
-    # this is the parent GUI of camera controlling
-    win = tk.Tk()
-    win.title("Machine Vison Camera controlling")
-    win.geometry("500x500")
-
-    # add main sub lable
-    lable = tk.Label(win, 
-        text= "Choose Button(s) to run Action(s)",
-        font= ("Arial Bold", 20)
-        )
-    lable.place(relx=0.5, rely=0.05, anchor = "n")
-
-    # add action buttons
-    var1 = tk.BooleanVar()
-    button1 = ttk.Checkbutton(win, variable=var1, text="Get all connected Cameras' instace and return as an Array")
-    button1.place(relx=0.1, rely=0.3, anchor = "w")
-
-    var2 = tk.BooleanVar()
-    button2 = ttk.Checkbutton(win, variable=var2, text="Set Cameras' parameters")
-    button2.place(relx=0.1, rely=0.4, anchor = "w")
-
-    var3 = tk.BooleanVar()
-    button3 = ttk.Checkbutton(win, variable=var3, text="Start or Stop Recording")
-    button3.place(relx=0.1, rely=0.5, anchor = "w")
-
-    # add functions for each buttons
-    def run_func():
-        win.destroy()
-        if var1.get(): # var1 = getting camera instance and return as an array
-            print("Getting all connected cameras instance")
-            cams = cam_init()
-            print("Cameras' instance ", cams)
-            return cams
-        if var2.get(): # var2 = setting cameras' parameters
-            print("Setting cameras' parameter")
-            set_parameter_entry() # call a GUI to type in parameters and return this values
-        if var3.get(): # var3 = starting and stopping camera record
-            print("Start or Stop camera recording")
-            video_start_stop_dir()
-
-    button4 = ttk.Button(win, text="run", command= run_func) # if arguments are in the command funtions lambda shuold be used. Otherwise, type in only function witout ()
-    button4.place(relx= 0.8, rely=0.8, anchor="n")
-
-    win.mainloop() # appear all GUI setting as pop up window
-
-"""
 class video_start_stop_dir:
-    def __init__(self):
+    def __init__(self, cams):
         # this is child GUI of main_cam_GUI when you want to control video starting and stopping
         win = tk.Tk()
         win.title("camera recording control")
