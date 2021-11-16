@@ -27,7 +27,7 @@ def video_recording(filepath, cam, video_format = "FFMPEG", video_codec="h264",
         print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
             "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
         cam.StopGrabbing()
-        cam.StartGrabbingMax(500)
+        cam.StartGrabbing()
         print("cam %s is recording" %(cam.GetDeviceInfo().GetFriendlyName(), ))
         while cam.IsGrabbing():
             try :
@@ -37,6 +37,10 @@ def video_recording(filepath, cam, video_format = "FFMPEG", video_codec="h264",
             writer.append_data(res.Array)
             res.Release()
 
-        cam.StopGrabbing()
-        cam.Close()
-        print("recording finish with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+
+def video_recording_stop(cam):
+    # stopping video recording
+    cam.StopGrabbing()
+    cam.Close()
+    print("recording finish with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+

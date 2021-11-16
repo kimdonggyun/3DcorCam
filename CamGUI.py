@@ -13,11 +13,12 @@ class cam_control():
     def __init__(self):
         print("Number of devices connected :")
         dev_number = input()
-        self.cams = cam_init(dev_number)
+        self.cams = [0, 1] # for the test. remove this line later
+        #self.cams = cam_init(dev_number)
         self.main_cam_GUI()
 
     def main_cam_GUI(self):
-        # this is the parent GUI of camera controlling
+        # this is the parent GUI of controlling camera
         win = tk.Tk()
         win.title("Machine Vison Camera controlling")
         win.geometry("500x500")
@@ -44,7 +45,6 @@ class cam_control():
 
         # add functions for each buttons
         def run_func():
-            win.destroy()
             if var1.get(): # var1 = getting camera instance and return as an array
                 print("Getting all connected cameras instance")
                 cams = cam_init()
@@ -61,104 +61,7 @@ class cam_control():
         button4.place(relx= 0.8, rely=0.8, anchor="n")
 
         win.mainloop() # appear all GUI setting as pop up window
-            
 
-class video_start_stop_dir:
-    def __init__(self, cams):
-        # this is child GUI of main_cam_GUI when you want to control video starting and stopping
-        win = tk.Tk()
-        win.title("camera recording control")
-        win.geometry("500x400")
-        self.win = win
-
-        # add main sub lable
-        lable = tk.Label(win, 
-            text= "Start or Stop camera recording",
-            font= ("Arial Bold", 15)
-            )
-        lable.place(relx=0.5, rely=0.05, anchor = "n")
-
-        # add cam1 and cam2 label
-        cam1_label = tk.Label(win,
-                        text = "here enter cam 1 name",
-                        font = ("Arial Bold", 12)
-                        )
-        cam1_label.place(relx= 0.1, rely=0.2, anchor="w")
-
-        cam2_label = tk.Label(win,
-                        text = "here enter cam 2 name",
-                        font = ("Arial Bold", 12)
-                        )
-        cam2_label.place(relx= 0.1, rely=0.3, anchor="w")
-
-        # define functions for dir and filename entry
-        def dir_sel():
-            dir = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "mp4")])
-            print(dir)        
-            return dir
-
-        # add buttons for choosing directory and typing in file name
-        cam1_button = tk.Button(win, text="choose directory", command=dir_sel)
-        cam1_button.place(relx=0.6, rely= 0.2, anchor= "w") 
-
-        cam2_button = tk.Button(win, text="choose directory", command=dir_sel)
-        cam2_button.place(relx=0.6, rely= 0.3, anchor= "w")
-
-
-        # add start and stop buttons
-        button1 = ttk.Button(win, text="START", command= lambda: video_recording(dir ,cam) )
-        button1.place(relx= 0.3, rely=0.5, anchor="n")
-
-        button2 = ttk.Button(win, text="STOP")
-        button2.place(relx= 0.7, rely=0.5, anchor="n")
-
-        win.mainloop() # appear all GUI setting as pop up window
-
-
-def video_start_stop():
-    # this is child GUI of main_cam_GUI when you want to control video starting and stopping
-    win = tk.Tk()
-    win.title("camera recording control")
-    win.geometry("500x400")
-
-    # add main sub lable
-    lable = tk.Label(win, 
-        text= "Start or Stop camera recording",
-        font= ("Arial Bold", 15)
-        )
-    lable.place(relx=0.5, rely=0.05, anchor = "n")
-
-    # add cam1 and cam2 label
-    cam1_label = tk.Label(win,
-                    text = "here enter cam 1 name",
-                    font = ("Arial Bold", 12)
-                    )
-    cam1_label.place(relx= 0.1, rely=0.2, anchor="w")
-
-    cam2_label = tk.Label(win,
-                    text = "here enter cam 2 name",
-                    font = ("Arial Bold", 12)
-                    )
-    cam2_label.place(relx= 0.1, rely=0.3, anchor="w")
-
-    # add buttons for choosing directory and typing in file name
-    cam1_button = tk.Button(win, text="choose directory", 
-            command= select_dir)
-    cam1_button.place(relx=0.6, rely= 0.2, anchor= "w") 
-
-    cam2_button = tk.Button(win, text="choose directory")
-    cam2_button.place(relx=0.6, rely= 0.3, anchor= "w")
-
-
-    # add start and stop buttons
-    button1 = ttk.Button(win, text="START")
-    button1.place(relx= 0.3, rely=0.5, anchor="n")
-
-    button2 = ttk.Button(win, text="STOP")
-    button2.place(relx= 0.7, rely=0.5, anchor="n")
-
-
-    win.mainloop() # appear all GUI setting as pop up window
 
 class set_parameter_entry:
     """
@@ -167,7 +70,7 @@ class set_parameter_entry:
     def __init__(self, cams):
         win = tk.Tk()
         win.title("Set Camera parameters")
-        win.geometry("400x600")
+        win.geometry("450x600")
         self.win = win
 
         # add main sub lable
@@ -227,6 +130,57 @@ class set_parameter_entry:
         print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
         self.win.destroy()
 
+
+
+class video_start_stop_dir:
+    def __init__(self, cams):
+        # this is child GUI of main_cam_GUI when you want to control video starting and stopping
+        win = tk.Tk()
+        win.title("camera recording control")
+        win.geometry("500x400")
+        self.win = win
+
+        # add main sub lable
+        lable = tk.Label(win, 
+            text= "Start or Stop camera recording",
+            font= ("Arial Bold", 15)
+            )
+        lable.place(relx=0.5, rely=0.05, anchor = "n")
+
+        # add cam1 and cam2 label
+        cam1_label = tk.Label(win,
+                        text = "here enter cam 1 name",
+                        font = ("Arial Bold", 12)
+                        )
+        cam1_label.place(relx= 0.1, rely=0.2, anchor="w")
+
+        cam2_label = tk.Label(win,
+                        text = "here enter cam 2 name",
+                        font = ("Arial Bold", 12)
+                        )
+        cam2_label.place(relx= 0.1, rely=0.3, anchor="w")
+
+        # define functions for dir and filename entry
+        def dir_sel():
+            dir = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "mp4")])
+            print(dir)        
+            return dir
+
+        # add buttons for choosing directory and typing in file name
+        cam1_button = tk.Button(win, text="choose directory", command=dir_sel)
+        cam1_button.place(relx=0.6, rely= 0.2, anchor= "w") 
+
+        cam2_button = tk.Button(win, text="choose directory", command=dir_sel)
+        cam2_button.place(relx=0.6, rely= 0.3, anchor= "w")
+
+        # add start and stop buttons
+        button1 = ttk.Button(win, text="START", command= lambda: video_recording(dir , cams) )
+        button1.place(relx= 0.3, rely=0.5, anchor="n")
+
+        button2 = ttk.Button(win, text="STOP")
+        button2.place(relx= 0.7, rely=0.5, anchor="n", command = lambda: video_recording_stop(cams))
+
+        win.mainloop() # appear all GUI setting as pop up window
 
 
 if __name__=="__main__":
