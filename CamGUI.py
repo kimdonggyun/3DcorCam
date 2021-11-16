@@ -7,7 +7,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from camcommands import cam_init, multi_recording ,dev_set_param
-from video_recording import video_recording
+from video_recording import multi_video_recording_start, multi_video_recording_stop
 
 class cam_control():
     def __init__(self):
@@ -162,9 +162,9 @@ class video_start_stop_dir:
 
         # define functions for dir and filename entry
         def dir_sel():
-            dir = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "mp4")])
-            print(dir)        
-            return dir
+            filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "mp4")])
+            print(filepath)        
+            return filepath
 
         # add buttons for choosing directory and typing in file name
         cam1_button = tk.Button(win, text="choose directory", command=dir_sel)
@@ -174,11 +174,11 @@ class video_start_stop_dir:
         cam2_button.place(relx=0.6, rely= 0.3, anchor= "w")
 
         # add start and stop buttons
-        button1 = ttk.Button(win, text="START", command= lambda: video_recording(dir , cams) )
+        button1 = ttk.Button(win, text="START", command= lambda: multi_video_recording_start(filepaht, cams) )
         button1.place(relx= 0.3, rely=0.5, anchor="n")
 
         button2 = ttk.Button(win, text="STOP")
-        button2.place(relx= 0.7, rely=0.5, anchor="n", command = lambda: video_recording_stop(cams))
+        button2.place(relx= 0.7, rely=0.5, anchor="n", command = lambda: multi_video_recording_stop(cams))
 
         win.mainloop() # appear all GUI setting as pop up window
 

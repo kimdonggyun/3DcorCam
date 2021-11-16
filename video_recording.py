@@ -6,14 +6,13 @@ from datetime import datetime
 from threading import Thread
 
 
-class multi_video_recording:
+class multi_video_recording_start:
     def __init__(self, filepath, cams, video_format = "FFMPEG", video_codec="h264",
                         writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
         self.multi_recording(filepath=filepath, cams=cams, video_format=video_format, video_codec=video_codec,
                                 writing_mode=writing_mode, macro_block_size=macro_block_size, quality=quality,
-                                bitrate=bitrate, fps=fps) #
+                                bitrate=bitrate, fps=fps)
         
-
     def multi_recording(self, filepath, cams, video_format = "FFMPEG", video_codec="h264",
                         writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
         # synchronized camera recording
@@ -21,15 +20,12 @@ class multi_video_recording:
                         args=(filepath, cams[0], video_format, video_codec,
                         writing_mode, macro_block_size, quality, bitrate, fps)
                         )
-        cam2 = Thread(name="cam1", target= self.video_recording_start, 
+        cam2 = Thread(name="cam2", target= self.video_recording_start, 
                         args=(filepath, cams[1], video_format, video_codec,
                         writing_mode, macro_block_size, quality, bitrate, fps)
                         )
         cam1.start()
         cam2.start()
-
-        cam1.join()
-        cam2.join()
 
     def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
                     writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
@@ -65,10 +61,29 @@ class multi_video_recording:
 
 
 
-def video_recording_stop(cam):
-    # stopping video recording
-    cam.StopGrabbing()
-    cam.Close()
-    print("recording finish with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+class multi_video_recording_stop:
+    # stop camera recording at the same time
+    def __init__(self, cams):
+        self.multi_recording_stop(cams)
+        
+    def multi_recording_stop(self, cams):
+        # stop camera recording at the same time
+        cam1 = Thread(name="cam1", target= self.video_recording_stop, 
+                        args=(cams[0])
+                        )
+        cam2 = Thread(name="cam2", target= self.video_recording_stop, 
+                        args=(cams[1])
+                        )
+        cam1.start() # start camera stopping
+        cam2.start()
+
+        cam1.join()
+        cam2.join()
+
+    def video_recording_stop(self, cam):
+        # stopping video recording
+        cam.StopGrabbing()
+        cam.Close()
+        print("recording finished with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
 
 
