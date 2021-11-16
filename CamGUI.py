@@ -147,8 +147,8 @@ class video_start_stop_dir:
         button1 = ttk.Button(win, text="START", command= lambda: multi_video_recording_start(cams) )
         button1.place(relx= 0.3, rely=0.5, anchor="n")
 
-        button2 = ttk.Button(win, text="STOP")
-        button2.place(relx= 0.7, rely=0.5, anchor="n", command = lambda: multi_video_recording_stop(cams))
+        button2 = ttk.Button(win, text="STOP", command = lambda: multi_video_recording_stop(cams))
+        button2.place(relx= 0.7, rely=0.5, anchor="n")
 
         win.mainloop() # appear all GUI setting as pop up window
 
