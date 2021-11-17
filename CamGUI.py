@@ -11,9 +11,8 @@ from video_recording import multi_video_recording_start, multi_video_recording_s
 class cam_control():
     def __init__(self):
         print("Number of devices connected :")
-        dev_number = input()
-        self.cams = [0, 1] # for the test. remove this line later
-        #self.cams = cam_init(dev_number)
+        dev_number = int(input()) # default input data type is string. Should chage the type with desire type
+        self.cams = cam_init(dev_number)
         self.main_cam_GUI()
 
     def main_cam_GUI(self):
@@ -122,11 +121,12 @@ class set_parameter_entry:
         win.mainloop() # appear all GUI setting as pop up window
 
     def run_button(self, cams):
-        height, width, exposure, fps =  self.height.get(), self.width.get(), self.exposure.get(), self.fps.get()
-        PixelFormat, InterPacketDelay = self.PixelFormat.get(), self.InterPacketDelay.get()
+        height, width, exposure, fps =  int(self.height.get()), int(self.width.get()), int(self.exposure.get()), int(self.fps.get())
+        PixelFormat, InterPacketDelay = str(self.PixelFormat.get()), int(self.InterPacketDelay.get())
+        print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
         for cam in cams:
             dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
-        print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
+        
         self.win.destroy()
 
 
