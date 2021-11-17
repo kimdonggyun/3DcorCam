@@ -136,7 +136,7 @@ class video_start_stop_dir:
         # this is child GUI of main_cam_GUI when you want to control video starting and stopping
         win = tk.Tk()
         win.title("camera recording control")
-        win.geometry("500x400")
+        win.geometry("400x300")
         self.win = win
 
         # add main sub lable

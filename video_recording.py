@@ -65,7 +65,6 @@ class multi_video_recording_start:
             cam.Open()
             print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
                 "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
-            cam.StopGrabbing()
             cam.StartGrabbing()
             
             while cam.IsGrabbing():
