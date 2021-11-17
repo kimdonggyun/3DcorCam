@@ -8,8 +8,8 @@ from tkinter import filedialog
 
 
 class multi_video_recording_start:
-    def __init__(self, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
+    def __init__(self, cams, video_format = "FFMPEG", video_codec="libx264",
+                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
 
         filepath_cam1 = self.get_filepath()
         filepath_cam2 = self.get_filepath()
@@ -17,10 +17,10 @@ class multi_video_recording_start:
 
         self.multi_recording(filepaths=filepaths, cams=cams, video_format=video_format, video_codec=video_codec,
                                 writing_mode=writing_mode, macro_block_size=macro_block_size, quality=quality,
-                                bitrate=bitrate, fps=fps)
+                                bitrate=bitrate)
 
-    def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
+    def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="libx264",
+                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
         """
         recording cameras at the same time.
         filepaths (in tuple or list form with full file path and file name e.g. user/desktop/camer/video.mp4)
@@ -29,11 +29,11 @@ class multi_video_recording_start:
 
         cam1 = Thread(name="cam1", target= self.video_recording_start, 
                         args=(filepaths[0] , cams[0], video_format, video_codec,
-                        writing_mode, macro_block_size, quality, bitrate, fps)
+                        writing_mode, macro_block_size, quality, bitrate)
                         )
         cam2 = Thread(name="cam2", target= self.video_recording_start, 
                         args=(filepaths[1] , cams[1], video_format, video_codec,
-                        writing_mode, macro_block_size, quality, bitrate, fps)
+                        writing_mode, macro_block_size, quality, bitrate)
                         )
         cam1.start()
         cam2.start()
@@ -46,8 +46,8 @@ class multi_video_recording_start:
         print(filepath)
         return filepath
 
-    def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
-                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
+    def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="libx264",
+                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
         """
         recording through camera and writing the video into as a video file
         video_format = e.g. FFMPEG
@@ -60,10 +60,8 @@ class multi_video_recording_start:
         """
 
         with get_writer(filepath, format=video_format, codec=video_codec, 
-                macro_block_size=macro_block_size, mode= writing_mode, fps=fps, quality=quality, bitrate=bitrate) as writer:
-            #print("parent process : %s / process id %s" % (os.getppid(), os.getpid()))
-            
-            
+                macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate) as writer:
+
             cam.Open()
             print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
                 "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
@@ -101,8 +99,11 @@ class multi_video_recording_stop:
 
     def video_recording_stop(self, cam):
         # stopping video recording
-        cam.StopGrabbing()
-        cam.Close()
-        print("recording finished with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+        if cam.IsGrabbing():
+            cam.StopGrabbing()
+            cam.Close()
+            print("recording finished with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+        else:
+            print("Cam %s is not currently recording" % (cam.DeviceInfo.GetFriendlyName()) )
 
 
