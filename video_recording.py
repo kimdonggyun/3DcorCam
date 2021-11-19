@@ -8,8 +8,8 @@ from tkinter import filedialog
 
 
 class multi_video_recording_start:
-    def __init__(self, cams, video_format = "FFMPEG", video_codec="libx264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
+    def __init__(self, cams, video_format = "FFMPEG", video_codec="h264",
+                        writing_mode="I", macro_block_size= 2, quality=5, bitrate=None):
 
         filepath_cam1 = self.get_filepath()
         filepath_cam2 = self.get_filepath()
@@ -19,7 +19,7 @@ class multi_video_recording_start:
                                 writing_mode=writing_mode, macro_block_size=macro_block_size, quality=quality,
                                 bitrate=bitrate)
 
-    def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="libx264",
+    def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="h264",
                         writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
         """
         recording cameras at the same time.
@@ -42,11 +42,12 @@ class multi_video_recording_start:
         print("recording start with %s at %s" % (cams[1].DeviceInfo.GetFriendlyName(), datetime.now()))
  
     def get_filepath(self):
-        filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "*.mp4")])
+
+        filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/awiadm/Desktop/Dong_camera/recording"), filetypes=[("video", "*.mp4")])
         print(filepath)
         return filepath
 
-    def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="libx264",
+    def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
                     writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
         """
         recording through camera and writing the video into as a video file
