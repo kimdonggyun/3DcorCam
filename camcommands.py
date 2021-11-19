@@ -36,10 +36,13 @@ def cam_non_identical (tl_factory, devices, dev_number):
         temp_dev_list = [] # create empty camera list to com
         for dev_info in devices:
             temp_dev_list.append(dev_info.GetSerialNumber())
+        
+        print(type(len(set(temp_dev_list))), type(dev_number))
 
         if len(set(temp_dev_list)) == dev_number:
             print("all cameras' instance are created", temp_dev_list)
             return tl_factory, devices
+
         else:
             while len(set(temp_dev_list)) != dev_number: # count the unique camera instant and compare it with desired number of cameras
                 tl_factory = pylon.TlFactory.GetInstance() # get instance again

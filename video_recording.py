@@ -8,35 +8,47 @@ from tkinter import filedialog
 
 
 class multi_video_recording_start:
-    def __init__(self, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
-        self.multi_recording(cams=cams, video_format=video_format, video_codec=video_codec,
-                                writing_mode=writing_mode, macro_block_size=macro_block_size, quality=quality,
-                                bitrate=bitrate, fps=fps)
+    def __init__(self, cams, video_format = "FFMPEG", video_codec="libx264",
+                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
 
-    def multi_recording(self, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
-        # synchronized camera recording
-        # get filepath for each camera
+        filepath_cam1 = self.get_filepath()
+        filepath_cam2 = self.get_filepath()
+        filepaths = (filepath_cam1, filepath_cam2)
+
+        self.multi_recording(filepaths=filepaths, cams=cams, video_format=video_format, video_codec=video_codec,
+                                writing_mode=writing_mode, macro_block_size=macro_block_size, quality=quality,
+                                bitrate=bitrate)
+
+    def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="libx264",
+                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
+        """
+        recording cameras at the same time.
+        filepaths (in tuple or list form with full file path and file name e.g. user/desktop/camer/video.mp4)
+        cams (array of camera instaces)
+        """
+
         cam1 = Thread(name="cam1", target= self.video_recording_start, 
-                        args=(cams[0], video_format, video_codec,
-                        writing_mode, macro_block_size, quality, bitrate, fps)
+                        args=(filepaths[0] , cams[0], video_format, video_codec,
+                        writing_mode, macro_block_size, quality, bitrate)
                         )
         cam2 = Thread(name="cam2", target= self.video_recording_start, 
-                        args=(cams[1], video_format, video_codec,
-                        writing_mode, macro_block_size, quality, bitrate, fps)
+                        args=(filepaths[1] , cams[1], video_format, video_codec,
+                        writing_mode, macro_block_size, quality, bitrate)
                         )
         cam1.start()
         cam2.start()
 
-
+        print("recording start with %s at %s" % (cams[0].DeviceInfo.GetFriendlyName(), datetime.now()))
+        print("recording start with %s at %s" % (cams[1].DeviceInfo.GetFriendlyName(), datetime.now()))
+ 
     def get_filepath(self):
+
         filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/awiadm/Desktop/Dong_camera/recording"), filetypes=[("video", "*.mp4")])
         print(filepath)
         return filepath
 
-    def video_recording_start(self, cam, video_format = "FFMPEG", video_codec="h264",
-                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps = 10):
+    def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="libx264",
+                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
         """
         recording through camera and writing the video into as a video file
         video_format = e.g. FFMPEG
@@ -48,19 +60,14 @@ class multi_video_recording_start:
         bitrate = None  # integer, if None, quality parameter will be used. Otherwise, quality parameter will be ignored
         """
 
-        filepath = self.get_filepath() # get filepath to save using tkinter
-
         with get_writer(filepath, format=video_format, codec=video_codec, 
-                macro_block_size=macro_block_size, mode= writing_mode, fps=fps, quality=quality, bitrate=bitrate) as writer:
-            #print("parent process : %s / process id %s" % (os.getppid(), os.getpid()))
-            print("recording start with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
-            
+                macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate) as writer:
+
             cam.Open()
             print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
                 "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
-            cam.StopGrabbing()
             cam.StartGrabbing()
-            print("cam %s is recording" %(cam.GetDeviceInfo().GetFriendlyName(), ))
+            
             while cam.IsGrabbing():
                 try :
                     res = cam.RetrieveResult(10000, pylon.GrabStrategy_OneByOne )
@@ -79,10 +86,10 @@ class multi_video_recording_stop:
     def multi_recording_stop(self, cams):
         # stop camera recording at the same time
         cam1 = Thread(name="cam1", target= self.video_recording_stop, 
-                        args=(cams[0])
+                        args=(cams[0],)
                         )
         cam2 = Thread(name="cam2", target= self.video_recording_stop, 
-                        args=(cams[1])
+                        args=(cams[1],)
                         )
         cam1.start() # start camera stopping
         cam2.start()
@@ -92,8 +99,11 @@ class multi_video_recording_stop:
 
     def video_recording_stop(self, cam):
         # stopping video recording
-        cam.StopGrabbing()
-        cam.Close()
-        print("recording finished with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+        if cam.IsGrabbing():
+            cam.StopGrabbing()
+            cam.Close()
+            print("recording finished with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
+        else:
+            print("Cam %s is not currently recording" % (cam.DeviceInfo.GetFriendlyName()) )
 
 
