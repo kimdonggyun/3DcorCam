@@ -37,8 +37,6 @@ def cam_non_identical (tl_factory, devices, dev_number):
         for dev_info in devices:
             temp_dev_list.append(dev_info.GetSerialNumber())
         
-        print(type(len(set(temp_dev_list))), type(dev_number))
-
         if len(set(temp_dev_list)) == dev_number:
             print("all cameras' instance are created", temp_dev_list)
             return tl_factory, devices
