@@ -4,8 +4,10 @@
 from pypylon import pylon
 
 def cam_init (dev_number):
-    # getting instance of basler cam
-    # return connected camera instances
+    """
+    getting instance of basler cam
+    return connected camera instances
+    """
     print("getting the first camera instance")
     tl_factory = pylon.TlFactory.GetInstance() # get the first instance with all connected cameras
     devices = tl_factory.EnumerateDevices()
@@ -55,8 +57,9 @@ def cam_non_identical (tl_factory, devices, dev_number):
             return tl_factory, devices
 
 def dev_info(devices):
-    # print out all connected cameras' basic information
-    # 2. check the devices information
+    """
+    print out all connected cameras' basic information
+    """
     if len(devices) == 0:
         raise pylon.RuntimeException("No camera connected")
     else:
@@ -69,14 +72,15 @@ def dev_info(devices):
 
 
 def dev_2_array (tl_factory, devices, dev_number):
-    # create array of devices connected for the easier handling of individual camera
-    # return array including device instance
+    """
+    create array of devices connected for the easier handling of individual camera
+    return array including device instance
+    """
     cams = pylon.InstantCameraArray(min(len(devices), dev_number)) # create instant
     for i, cam in enumerate(cams):
         cam.Attach(tl_factory.CreateDevice(devices[i]))
     return cams
-
-
+    
 def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
          FPS = 10, Pixelformat= "Mono8", InterPacketDelay= 20000):
     """
