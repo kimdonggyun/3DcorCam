@@ -9,7 +9,7 @@ from tkinter import filedialog
 
 class multi_video_recording_start:
     def __init__(self, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 2, quality=5, bitrate=None):
+                        writing_mode="I", macro_block_size= 2, quality=5, bitrate=None, fps=10):
 
         filepath_cam1 = self.get_filepath()
         filepath_cam2 = self.get_filepath()
@@ -20,7 +20,7 @@ class multi_video_recording_start:
                                 bitrate=bitrate)
 
     def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
+                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps=10):
         """
         recording cameras at the same time.
         filepaths (in tuple or list form with full file path and file name e.g. user/desktop/camer/video.mp4)
@@ -48,7 +48,7 @@ class multi_video_recording_start:
         return filepath
 
     def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
-                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None):
+                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps=10):
         """
         recording through camera and writing the video into as a video file
         video_format = e.g. FFMPEG
@@ -61,7 +61,7 @@ class multi_video_recording_start:
         """
 
         with get_writer(filepath, format=video_format, codec=video_codec, 
-                macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate) as writer:
+                macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate, fps=fps) as writer:
 
             cam.Open()
             print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
