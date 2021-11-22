@@ -154,6 +154,5 @@ class video_start_stop_dir:
 
 
 if __name__=="__main__":
-    #main_cam_GUI()
-    #video_start_stop()
+
     cam_control()
