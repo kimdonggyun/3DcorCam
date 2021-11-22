@@ -5,14 +5,19 @@ from imageio import get_writer
 from datetime import datetime
 from threading import Thread
 from tkinter import filedialog
+import os
 
 
 class multi_video_recording_start:
     def __init__(self, cams, video_format = "FFMPEG", video_codec="h264",
                         writing_mode="I", macro_block_size= 2, quality=5, bitrate=None, fps=10):
 
-        filepath_cam1 = self.get_filepath()
-        filepath_cam2 = self.get_filepath()
+        recording_dir = "/Users/dkim/Desktop/basler_camera/recording"
+        filename_cam1 = input("type the file name for Cam1 :")
+        filename_cam2 = input("type the file name for Cam2 :")
+        filepath_cam1 = os.path.join(recording_dir, filename_cam1+str(".mp4"))
+        filepath_cam2 = os.path.join(recording_dir, filename_cam2+str(".mp4"))
+
         filepaths = (filepath_cam1, filepath_cam2)
 
         self.multi_recording(filepaths=filepaths, cams=cams, video_format=video_format, video_codec=video_codec,
@@ -40,13 +45,14 @@ class multi_video_recording_start:
 
         print("recording start with %s at %s" % (cams[0].DeviceInfo.GetFriendlyName(), datetime.now()))
         print("recording start with %s at %s" % (cams[1].DeviceInfo.GetFriendlyName(), datetime.now()))
- 
+    
+    """
     def get_filepath(self):
 
         filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "*.mp4")])
         print(filepath)
         return filepath
-
+    """
     def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
                     writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps=10):
         """
