@@ -6,6 +6,58 @@ from datetime import datetime
 from threading import Thread
 from tkinter import filedialog
 import os
+import cv2
+
+class cam_preview:
+    """
+    preview set cameras with popup windows
+    """
+    def __init__(self, cams):
+
+        cam1 = Thread(name="cam1", target= self.cam_preview_start, 
+                        args=(cams[0], )
+                        )
+        cam2 = Thread(name="cam2", target= self.cam_preview_start, 
+                        args=(cams[1], )
+                        )
+        cam1.start()
+        cam2.start()
+    
+    def cam_preview_start(self, cam):
+        """
+        
+        """
+
+
+
+def cam_preview(cams):
+
+    cam.Open()
+    print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
+        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
+    cam.StartGrabbing()
+    
+    while cam.IsGrabbing():
+        try :
+            res = cam.RetrieveResult(10000, pylon.GrabStrategy_OneByOne )
+        except:
+            print("something wrong while retrieving the sequence")
+        cv2.imshow("Cam", res.Array)
+        res.Release()
+
+            cam1 = Thread(name="cam1", target= self.video_recording_start, 
+                        args=(filepaths[0] , cams[0], video_format, video_codec,
+                        writing_mode, macro_block_size, quality, bitrate)
+                        )
+        cam2 = Thread(name="cam2", target= self.video_recording_start, 
+                        args=(filepaths[1] , cams[1], video_format, video_codec,
+                        writing_mode, macro_block_size, quality, bitrate)
+                        )
+        cam1.start()
+        cam2.start()
+
+
+
 
 
 class multi_video_recording_start:
