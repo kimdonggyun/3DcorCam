@@ -2,11 +2,12 @@
 
 from pypylon import pylon
 from imageio import get_writer
+import tkinter as tk
+from tkinter import ttk, Frame, Label
 from datetime import datetime
 from threading import Thread
-from tkinter import filedialog
+from PIL import ImageTk, Image
 import os
-import cv2
 
 class cam_preview:
     """
@@ -25,37 +26,36 @@ class cam_preview:
     
     def cam_preview_start(self, cam):
         """
-        
+        previewing currently connected camera
         """
+        win = tk.Tk()
+        app = Frame(win, bg="white")
+        app.grid()
+        # Create a label in the frame
+        lmain = Label(app)
+        lmain.grid()
 
+        win.title("Prewviewing camera %s" % (cam.DeviceInfo.GetFriendlyName() , ))
+        win.geometry("1000x1000")
+        self.win = win
 
+    def video
+        cam.Open()
+        cam.StartGrabbing()
 
-def cam_preview(cams):
+        while cam.IsGrabbing():
+            try:
+                res = cam.RetrieveResult(10000)
+            except:
+                print("something wrong while retrieving the sequence")
+            
+            imgtk = ImageTk.PhotoImage(image=res.Array)
+            lmain.imgtk = imgtk
+            lmain.configure(image=imgtk)
+            lmain(1, )
 
-    cam.Open()
-    print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
-        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
-    cam.StartGrabbing()
-    
-    while cam.IsGrabbing():
-        try :
-            res = cam.RetrieveResult(10000, pylon.GrabStrategy_OneByOne )
-        except:
-            print("something wrong while retrieving the sequence")
-        cv2.imshow("Cam", res.Array)
-        res.Release()
-
-            cam1 = Thread(name="cam1", target= self.video_recording_start, 
-                        args=(filepaths[0] , cams[0], video_format, video_codec,
-                        writing_mode, macro_block_size, quality, bitrate)
-                        )
-        cam2 = Thread(name="cam2", target= self.video_recording_start, 
-                        args=(filepaths[1] , cams[1], video_format, video_codec,
-                        writing_mode, macro_block_size, quality, bitrate)
-                        )
-        cam1.start()
-        cam2.start()
-
+        win.mainloop()
+            
 
 
 
