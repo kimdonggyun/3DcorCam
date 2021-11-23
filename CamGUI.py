@@ -99,10 +99,15 @@ class cam_preview:
                 res = cam.RetrieveResult(10000)
             except:
                 print("something wrong while retrieving the sequence")
-        print("cam %s is showing" % (cam.DeviceInfo.GetFriendlyName() , ))
-        img_ary = res.Array
-        cv2.imshow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), img_ary)
-        cv2.namedWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,))
+            print("cam %s is showing" % (cam.DeviceInfo.GetFriendlyName() , ))
+            img_ary = res.Array
+            cv2.imshow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), img_ary)
+            cv2.namedWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,))
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                print("prevewing is done")
+                cam.StopGrabbing()
+                cam.Close()
+                break
 
 
 
