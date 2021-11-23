@@ -4,15 +4,19 @@ from pypylon import pylon
 from imageio import get_writer
 from datetime import datetime
 from threading import Thread
-import os
-
+import os, platform, cv2
 
 
 class multi_video_recording_start:
     def __init__(self, cams, video_format = "FFMPEG", video_codec="h264",
                         writing_mode="I", macro_block_size= 2, quality=5, bitrate=None, fps=10):
 
-        recording_dir = "/Users/dkim/Desktop/basler_camera/recording"
+        # check OS
+        if platform.system() == "Windows":
+            recording_dir = "C:/Users/dkim/Desktop/basler_cam/recording"
+        elif platform.system() == "Darwin":
+            recording_dir = "/Users/dkim/Desktop/basler_camera/recording"
+
         filename_cam1 = input("type the file name for Cam1 :")
         filename_cam2 = input("type the file name for Cam2 :")
         filepath_cam1 = os.path.join(recording_dir, filename_cam1+str(".mp4"))
@@ -45,14 +49,7 @@ class multi_video_recording_start:
 
         print("recording start with %s at %s" % (cams[0].DeviceInfo.GetFriendlyName(), datetime.now()))
         print("recording start with %s at %s" % (cams[1].DeviceInfo.GetFriendlyName(), datetime.now()))
-    
-    """
-    def get_filepath(self):
 
-        filepath = filedialog.asksaveasfilename(initialdir=("C:/Users/dkim/Desktop/basler_cam/recording"), filetypes=[("video", "*.mp4")])
-        print(filepath)
-        return filepath
-    """
     def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
                     writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps=10):
         """
@@ -108,8 +105,49 @@ class multi_video_recording_stop:
         if cam.IsGrabbing():
             cam.StopGrabbing()
             cam.Close()
+            cam.Release()
             print("recording finished with %s at %s" % (cam.DeviceInfo.GetFriendlyName(), datetime.now()))
         else:
             print("Cam %s is not currently recording" % (cam.DeviceInfo.GetFriendlyName()) )
 
 
+class cam_preview:
+    """
+    preview set cameras with popup windows
+    """
+    def __init__(self, cams):
+        self.cam_preview_start(cams)
+    
+    def cam_preview_start(self, cams):
+        """
+        previewing currently connected camera
+        """
+        print("Preview will start soon. To quit the preview, press 'q' for each windows")
+        cam1 = Thread(name="cam1", target= self.video_stream, args=(cams[0], ) )
+        cam2 = Thread(name="cam2", target= self.video_stream, args=(cams[1], ) )
+        cam1.start()
+        cam2.start()
+
+    def video_stream(self, cam):
+        cam.Open() # cam open
+        print("Set %s: " %(cam.GetDeviceInfo().GetFriendlyName(), ) , "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
+        "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(),
+        "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
+
+        cam.StartGrabbing() # cam start getting image
+        print("cam %s is showing" % (cam.DeviceInfo.GetFriendlyName() , ))
+        while cam.IsGrabbing():
+            try:
+                res = cam.RetrieveResult(10000)
+            except:
+                print("something wrong while retrieving the sequence")
+            
+            img_ary = res.Array # array of image
+            cv2.imshow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), img_ary)
+            cv2.namedWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), cv2.WINDOW_NORMAL)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                print("prevewing is done")
+                cam.StopGrabbing()
+                cam.Close()
+                cv2.destroyWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,)) # destroy popup window, Mendatory for the multiple previewing
+                break
