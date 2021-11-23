@@ -2,61 +2,9 @@
 
 from pypylon import pylon
 from imageio import get_writer
-import tkinter as tk
-from tkinter import ttk, Frame, Label
 from datetime import datetime
 from threading import Thread
-from PIL import ImageTk, Image
 import os
-
-class cam_preview:
-    """
-    preview set cameras with popup windows
-    """
-    def __init__(self, cams):
-
-        cam1 = Thread(name="cam1", target= self.cam_preview_start, 
-                        args=(cams[0], )
-                        )
-        cam2 = Thread(name="cam2", target= self.cam_preview_start, 
-                        args=(cams[1], )
-                        )
-        cam1.start()
-        cam2.start()
-    
-    def cam_preview_start(self, cam):
-        """
-        previewing currently connected camera
-        """
-        win = tk.Tk()
-        app = Frame(win, bg="white")
-        app.grid()
-        # Create a label in the frame
-        lmain = Label(app)
-        lmain.grid()
-
-        win.title("Prewviewing camera %s" % (cam.DeviceInfo.GetFriendlyName() , ))
-        win.geometry("1000x1000")
-        self.win = win
-
-    def video
-        cam.Open()
-        cam.StartGrabbing()
-
-        while cam.IsGrabbing():
-            try:
-                res = cam.RetrieveResult(10000)
-            except:
-                print("something wrong while retrieving the sequence")
-            
-            imgtk = ImageTk.PhotoImage(image=res.Array)
-            lmain.imgtk = imgtk
-            lmain.configure(image=imgtk)
-            lmain(1, )
-
-        win.mainloop()
-            
-
 
 
 
