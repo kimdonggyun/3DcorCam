@@ -4,9 +4,17 @@
 
 #import functions
 import tkinter as tk
-from tkinter import ttk
+from tkinter import Toplevel, ttk
 from camcommands import cam_init, dev_set_param
-from video_recording import multi_video_recording_start, multi_video_recording_stop, cam_preview
+from video_recording import multi_video_recording_start, multi_video_recording_stop
+
+import tkinter as tk
+from tkinter import ttk, Frame, Label
+from datetime import datetime
+from threading import Thread
+from PIL import ImageTk, Image # packages for preview tkinter
+import cv2
+
 
 class cam_control():
     def __init__(self):
@@ -67,13 +75,91 @@ class cam_control():
 
         win.mainloop() # appear all GUI setting as pop up window
 
+class cam_preview:
+    """
+    preview set cameras with popup windows
+    """
+    def __init__(self, cams):
+        self.cam_preview_start(cams)
+    
+    def cam_preview_start(self, cams):
+        """
+        previewing currently connected camera
+        """
+        cam1 = Thread(name="cam1", target= self.video_stream, args=(cams[0], ) )
+        cam2 = Thread(name="cam2", target= self.video_stream, args=(cams[1], ) )
+        cam1.start()
+        cam2.start()
+
+    def video_stream(self, cam):
+        cam.Open() # cam open
+        cam.StartGrabbing() # cam start getting image
+        while cam.IsGrabbing():
+            try:
+                res = cam.RetrieveResult(10000)
+            except:
+                print("something wrong while retrieving the sequence")
+        print("cam %s is showing" % (cam.DeviceInfo.GetFriendlyName() , ))
+        img_ary = res.Array
+        cv2.imshow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), img_ary)
+        cv2.namedWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,))
+
+
+
+
+
+"""
+class cam_preview:
+    
+    preview set cameras with popup windows
+    
+    def __init__(self, cams):
+        self.cam_preview_start(cams)
+    
+    def cam_preview_start(self, cams):
+        
+        previewing currently connected camera
+        
+        cam1 = Thread(name="cam1", target= self.video_stream, args=(cams[0], ) )
+        cam2 = Thread(name="cam2", target= self.video_stream, args=(cams[1], ) )
+        cam1.start()
+        cam2.start()
+
+    def video_stream(self, cam):
+        win = tk.Tk()
+        app = Frame(win, bg="white")
+        app.grid()
+        # Create a label in the frame
+        lmain = Label(app)
+        lmain.grid()
+
+        win.title("Previewing camera %s" % (cam.DeviceInfo.GetFriendlyName() , ))
+        win.geometry("1000x1000")
+
+        cam.Open()
+        cam.StartGrabbing()
+
+        while cam.IsGrabbing():
+            try:
+                res = cam.RetrieveResult(10000)
+            except:
+                print("something wrong while retrieving the sequence")
+            
+            image = Image.fromarray(res.Array)
+            imgtk = ImageTk.PhotoImage(image=image)
+            lmain.imgtk = imgtk
+            lmain.configure(image=imgtk)
+            lmain(1, self.video_stream)
+
+        win.mainloop()
+"""      
 
 class set_parameter_entry:
     """
     setting camera paramters by typing the values on GUI
     """
     def __init__(self, cams):
-        win = tk.Tk()
+        win = Toplevel
         win.title("Set Camera parameters")
         win.geometry("450x600")
         self.win = win
