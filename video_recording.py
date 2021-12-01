@@ -20,7 +20,7 @@ class multi_video_recording_start:
                                 bitrate=bitrate)
 
     def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps=10):
+                        writing_mode="I", macro_block_size= 2, quality=5, bitrate=None, fps=10):
         """
         recording cameras at the same time.
         filepaths (in tuple or list form with full file path and file name e.g. user/desktop/camer/video.mp4)
@@ -48,7 +48,7 @@ class multi_video_recording_start:
         return filepath
 
     def video_recording_start(self, filepath, cam, video_format = "FFMPEG", video_codec="h264",
-                    writing_mode="I", macro_block_size= 1, quality=5, bitrate=None, fps=10):
+                    writing_mode="I", macro_block_size= 2, quality=5, bitrate=None, fps=10):
         """
         recording through camera and writing the video into as a video file
         video_format = e.g. FFMPEG
@@ -70,7 +70,7 @@ class multi_video_recording_start:
             
             while cam.IsGrabbing():
                 try :
-                    res = cam.RetrieveResult(10000, pylon.GrabStrategy_OneByOne )
+                    res = cam.RetrieveResult(10000)
                 except:
                     print("something wrong while recording")
                 writer.append_data(res.Array)
