@@ -6,13 +6,14 @@
 import tkinter as tk
 from tkinter import ttk
 from camcommands import cam_init, dev_set_param
-from video_recording import multi_video_recording_start, multi_video_recording_stop
+from video_recording import multi_video_recording_start, multi_video_recording_stop, cam_preview
+
 
 class cam_control():
     def __init__(self):
         print("Number of devices connected :")
-        dev_number = int(input()) # default input data type is string. Should chage the type with desire type
-        self.cams = cam_init(dev_number)
+        self.dev_number = int(input()) # default input data type is string. Should chage the type with desire type
+        self.cams = cam_init(self.dev_number)
         self.main_cam_GUI()
 
     def main_cam_GUI(self):
@@ -41,11 +42,15 @@ class cam_control():
         button3 = ttk.Checkbutton(win, variable=var3, text="Start or Stop Recording")
         button3.place(relx=0.1, rely=0.5, anchor = "w")
 
+        var4 = tk.BooleanVar()
+        button4 = ttk.Checkbutton(win, variable=var4, text="Preview camera")
+        button4.place(relx=0.1, rely=0.6, anchor = "w")
+
         # add functions for each buttons
         def run_func():
             if var1.get(): # var1 = getting camera instance and return as an array
                 print("Getting all connected cameras instance")
-                cams = cam_init()
+                cams = cam_init(self.dev_number)
                 print("Cameras' instance ", cams)
                 return cams
             if var2.get(): # var2 = setting cameras' parameters
@@ -54,9 +59,12 @@ class cam_control():
             if var3.get(): # var3 = starting and stopping camera record
                 print("Start or Stop camera recording")
                 video_start_stop_dir(self.cams) # call a GUI to start or stop video recording
+            if var4.get():
+                print("Previewing camera")
+                cam_preview(self.cams)
 
-        button4 = ttk.Button(win, text="run", command= run_func) # if arguments are in the command funtions lambda shuold be used. Otherwise, type in only function witout ()
-        button4.place(relx= 0.8, rely=0.8, anchor="n")
+        run_button = ttk.Button(win, text="run", command= run_func) # if arguments are in the command funtions lambda shuold be used. Otherwise, type in only function witout ()
+        run_button.place(relx= 0.8, rely=0.8, anchor="n")
 
         win.mainloop() # appear all GUI setting as pop up window
 
@@ -115,7 +123,7 @@ class set_parameter_entry:
         InterPacketDelay.place(relx = 0.8, rely = 0.8, anchor = 'w')
         self.InterPacketDelay = InterPacketDelay
 
-        button = ttk.Button(win, text="ISERT", command= lambda: self.run_button (cams))
+        button = ttk.Button(win, text="ISERT", command= lambda: self.run_button(cams))
         button.place(relx= 0.8, rely=0.9, anchor="n")
 
         win.mainloop() # appear all GUI setting as pop up window
