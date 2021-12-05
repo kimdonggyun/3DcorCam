@@ -16,7 +16,8 @@ class multi_video_recording_start:
             recording_dir = "C:/Users/awiadm/Desktop/Dong_camera/recording"
         elif platform.system() == "Darwin":
             recording_dir = "/Users/dkim/Desktop/basler_camera/recording"
-
+        
+        # input filepath
         filename_cam1 = input("type the file name for Cam1 :")
         filename_cam2 = input("type the file name for Cam2 :")
         filepath_cam1 = os.path.join(recording_dir, filename_cam1+str(".mp4"))
@@ -24,12 +25,18 @@ class multi_video_recording_start:
 
         filepaths = (filepath_cam1, filepath_cam2)
 
+        # check fps of camera and set this value as viedeo writer's fps. Both Camera's set FPS and video writer's FPS value should have to be same!!
+        while int(cams[0].AcquisitionFrameRateAbs.GetValue()) != int(cams[1].AcquisitionFrameRateAbs.GetValue()):
+            print("cameras' FPS value is different. Set new FPS ")
+            break
+
+        # run multi_recording function
         self.multi_recording(filepaths=filepaths, cams=cams, video_format=video_format, video_codec=video_codec,
                                 writing_mode=writing_mode, macro_block_size=macro_block_size, quality=quality,
                                 bitrate=bitrate)
 
     def multi_recording(self, filepaths, cams, video_format = "FFMPEG", video_codec="h264",
-                        writing_mode="I", macro_block_size= 2, quality=5, bitrate=None, fps=10):
+                        writing_mode="I", macro_block_size= 2, quality=5, bitrate=None):
         """
         recording cameras at the same time.
         filepaths (in tuple or list form with full file path and file name e.g. user/desktop/camer/video.mp4)
@@ -63,8 +70,10 @@ class multi_video_recording_start:
         bitrate = None  # integer, if None, quality parameter will be used. Otherwise, quality parameter will be ignored
         """
 
+        writer_fps = int(cam.AcquisitionFrameRateAbs.GetValue())
+
         with get_writer(filepath, format=video_format, codec=video_codec, 
-                macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate, fps=fps) as writer:
+                macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate, fps=writer_fps) as writer:
 
             cam.Open()
             print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
