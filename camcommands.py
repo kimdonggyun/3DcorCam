@@ -82,7 +82,7 @@ def dev_2_array (tl_factory, devices, dev_number):
     return cams
     
 def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
-         FPS = 10, Pixelformat= "Mono8", InterPacketDelay= 20000):
+         FPS = 10, Pixelformat= "Mono8", InterPacketDelay= 10000, PacketSize = 1500):
     """
     when setting parameters while using multiple cameras, consider - Inter packet delay, Frame rate and Exposure Time
     which are critical for generating video (no dropped frame)
@@ -93,7 +93,7 @@ def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
     
     print("original %s: " % (cam.GetDeviceInfo().GetFriendlyName(), ), " Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
             "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(),
-            "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
+            "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue(), "Packet Size:", cam.GevSCPSPacketSize.GetValue() )
     
     # setting values from parameter dictionary
     cam.Height.SetValue(Height)
@@ -102,8 +102,16 @@ def dev_set_param (cam, Height = 962 , width = 1286, ExposureTime = 4000,
     cam.AcquisitionFrameRateAbs.SetValue(FPS)
     cam.PixelFormat.SetValue(Pixelformat)
     cam.GevSCPD.SetValue(InterPacketDelay)
+    cam.GevSCPSPacketSize.SetValue(PacketSize)
 
     print("Set %s: " %(cam.GetDeviceInfo().GetFriendlyName(), ) , "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
             "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue(),
-            "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue())
+            "pixelformat:", cam.PixelFormat.GetValue(), "Inter Packet Dealy:", cam.GevSCPD.GetValue(), "Packet Size:", cam.GevSCPSPacketSize.GetValue())
+    
+    # Check whether maximum FPS with current setting is more than set FPS
+    if float(cam.ResultingFrameRateAbs.GetValue()) >= FPS:
+        print("You can apply set FPS (%s)" %(FPS  ,))
+    else:
+        print("maximum FPS is %s. Set lower FPS or change the setting" %(float(cam.ResultingFrameRateAbs.GetValue())  ,))
+    
     cam.Close() # close camera

@@ -88,49 +88,55 @@ class set_parameter_entry:
 
         # set enntry
         height_label = tk.Label(win, text='Height of Frame in Pixel :')
-        height_label.place(relx = 0.1, rely = 0.3, anchor = 'w')
+        height_label.place(relx = 0.1, rely = 0.1, anchor = 'w')
         height = tk.Entry(win, fg='black', width = 7)
-        height.place(relx = 0.8, rely = 0.3, anchor = 'w')
+        height.place(relx = 0.8, rely = 0.1, anchor = 'w')
         self.height = height
 
         width_label = tk.Label(win, text='Width of Frame in Pixel :')
-        width_label.place(relx = 0.1, rely = 0.4, anchor = 'w')
+        width_label.place(relx = 0.1, rely = 0.2, anchor = 'w')
         width = tk.Entry(win, fg='black', width = 7)
-        width.place(relx = 0.8, rely = 0.4, anchor = 'w')
+        width.place(relx = 0.8, rely = 0.2, anchor = 'w')
         self.width = width
 
         exposure_label = tk.Label(win, text='Exposure Time in µs :')
-        exposure_label.place(relx = 0.1, rely = 0.5, anchor = 'w')
+        exposure_label.place(relx = 0.1, rely = 0.3, anchor = 'w')
         exposure = tk.Entry(win, fg='black', width = 7)
-        exposure.place(relx = 0.8, rely = 0.5, anchor = 'w')
+        exposure.place(relx = 0.8, rely = 0.3, anchor = 'w')
         self.exposure = exposure
 
         fps_label = tk.Label(win, text='FPS :')
-        fps_label.place(relx = 0.1, rely = 0.6, anchor = 'w')
+        fps_label.place(relx = 0.1, rely = 0.4, anchor = 'w')
         fps = tk.Entry(win, fg='black', width = 7)
-        fps.place(relx = 0.8, rely = 0.6, anchor = 'w')
+        fps.place(relx = 0.8, rely = 0.4, anchor = 'w')
         self.fps = fps
 
         PixelFormat_label = tk.Label(win, text='PixelFormat (B/W: "Mono8") :')
-        PixelFormat_label.place(relx = 0.1, rely = 0.7, anchor = 'w')
+        PixelFormat_label.place(relx = 0.1, rely = 0.5, anchor = 'w')
         PixelFormat = tk.Entry(win, fg='black', width = 7)
-        PixelFormat.place(relx = 0.8, rely = 0.7, anchor = 'w')
+        PixelFormat.place(relx = 0.8, rely = 0.5, anchor = 'w')
         self.PixelFormat = PixelFormat
 
-        InterPacketDelay_label = tk.Label(win, text='Inter Packet Delay (default 20000) :')
-        InterPacketDelay_label.place(relx = 0.1, rely = 0.8, anchor = 'w')
+        InterPacketDelay_label = tk.Label(win, text='Inter Packet Delay :')
+        InterPacketDelay_label.place(relx = 0.1, rely = 0.6, anchor = 'w')
         InterPacketDelay = tk.Entry(win, fg='black', width = 7)
-        InterPacketDelay.place(relx = 0.8, rely = 0.8, anchor = 'w')
+        InterPacketDelay.place(relx = 0.8, rely = 0.6, anchor = 'w')
         self.InterPacketDelay = InterPacketDelay
 
+        Packet_size_label = tk.Label(win, text='Packet Size :')
+        Packet_size_label.place(relx = 0.1, rely = 0.7, anchor = 'w')
+        PacketSize = tk.Entry(win, fg='black', width = 7)
+        PacketSize.place(relx = 0.8, rely = 0.7, anchor = 'w')
+        self.PacketSize = PacketSize
+
         button = ttk.Button(win, text="ISERT", command= lambda: self.run_button(cams))
-        button.place(relx= 0.8, rely=0.9, anchor="n")
+        button.place(relx= 0.8, rely=0.95, anchor="n")
 
         win.mainloop() # appear all GUI setting as pop up window
 
     def run_button(self, cams):
         height, width, exposure, fps =  int(self.height.get()), int(self.width.get()), int(self.exposure.get()), int(self.fps.get())
-        PixelFormat, InterPacketDelay = str(self.PixelFormat.get()), int(self.InterPacketDelay.get())
+        PixelFormat, InterPacketDelay, PacketSize = str(self.PixelFormat.get()), int(self.InterPacketDelay.get()), int(self.PacketSize.get())
         print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
         for cam in cams:
             dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
