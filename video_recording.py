@@ -13,7 +13,7 @@ class multi_video_recording_start:
 
         # check OS
         if platform.system() == "Windows":
-            recording_dir = "C:/Users/dkim/Desktop/basler_cam/recording"
+            recording_dir = "C:/Users/awiadm/Desktop/Dong_camera/recording"
         elif platform.system() == "Darwin":
             recording_dir = "/Users/dkim/Desktop/basler_camera/recording"
 
