@@ -84,7 +84,7 @@ class set_parameter_entry:
             text= "type camera parameters",
             font= ("Arial Bold", 15)
             )
-        lable.place(relx=0.5, rely=0.05, anchor = "n")
+        lable.place(relx=0.5, rely=0.00, anchor = "n")
 
         # set enntry
         height_label = tk.Label(win, text='Height of Frame in Pixel :')

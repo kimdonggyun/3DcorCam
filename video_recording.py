@@ -26,9 +26,15 @@ class multi_video_recording_start:
         filepaths = (filepath_cam1, filepath_cam2)
 
         # check fps of camera and set this value as viedeo writer's fps. Both Camera's set FPS and video writer's FPS value should have to be same!!
+        cams[0].Open()
+        cams[1].Open()
+
         while int(cams[0].AcquisitionFrameRateAbs.GetValue()) != int(cams[1].AcquisitionFrameRateAbs.GetValue()):
             print("cameras' FPS value is different. Set new FPS ")
             break
+
+        cams[0].Close()
+        cams[1].Close()
 
         # run multi_recording function
         self.multi_recording(filepaths=filepaths, cams=cams, video_format=video_format, video_codec=video_codec,
@@ -69,13 +75,12 @@ class multi_video_recording_start:
         quality = 10  # float 0 - 10, default 5. better resolution with higher number
         bitrate = None  # integer, if None, quality parameter will be used. Otherwise, quality parameter will be ignored
         """
-
-        writer_fps = int(cam.AcquisitionFrameRateAbs.GetValue())
+        cam.Open() # open camera instance
+        writer_fps = int(cam.AcquisitionFrameRateAbs.GetValue()) # get fps value from camera to apply on writer's fps
 
         with get_writer(filepath, format=video_format, codec=video_codec, 
                 macro_block_size=macro_block_size, mode= writing_mode, quality=quality, bitrate=bitrate, fps=writer_fps) as writer:
 
-            cam.Open()
             print("Set value: ", "Height:",cam.Height.GetValue(), "Width:", cam.Width.GetValue(), 
                 "Exposuretime:", cam.ExposureTimeRaw.GetValue(), "AcquisitionFrameRate:", cam.AcquisitionFrameRateAbs.GetValue())       
             cam.StartGrabbing()
@@ -152,11 +157,14 @@ class cam_preview:
                 print("something wrong while retrieving the sequence")
             
             img_ary = res.Array # array of image
-            cv2.imshow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), img_ary)
-            cv2.namedWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), cv2.WINDOW_NORMAL)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                print("prevewing is done")
-                cam.StopGrabbing()
-                cam.Close()
-                cv2.destroyWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,)) # destroy popup window, Mendatory for the multiple previewing
-                break
+            if img_ary.size == 0:
+                print("no image")
+            else:
+                cv2.imshow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), img_ary)
+                cv2.namedWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,), cv2.WINDOW_NORMAL)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    print("prevewing is done")
+                    cam.StopGrabbing()
+                    cam.Close()
+                    cv2.destroyWindow("cam %s" % (cam.DeviceInfo.GetFriendlyName() ,)) # destroy popup window, Mendatory for the multiple previewing
+                    break
