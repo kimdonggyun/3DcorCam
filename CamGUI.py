@@ -139,7 +139,7 @@ class set_parameter_entry:
         PixelFormat, InterPacketDelay, PacketSize = str(self.PixelFormat.get()), int(self.InterPacketDelay.get()), int(self.PacketSize.get())
         print(height, width, exposure, fps, PixelFormat, InterPacketDelay)
         for cam in cams:
-            dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, InterPacketDelay= InterPacketDelay )
+            dev_set_param (cam, Height = height , width = width, ExposureTime = exposure, FPS = fps, Pixelformat= PixelFormat, PacketSize=PacketSize, InterPacketDelay= InterPacketDelay )
         
         self.win.destroy()
 
